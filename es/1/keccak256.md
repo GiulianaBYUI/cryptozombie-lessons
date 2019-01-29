@@ -5,7 +5,7 @@ material:
   editor:
     language: sol
     startingCode: |
-      pragma solidity ^0.4.19;
+      pragma solidity ^0.4.25;
 
       contract ZombieFactory {
 
@@ -29,7 +29,7 @@ material:
 
       }
     answer: >
-      pragma solidity ^0.4.19;
+      pragma solidity ^0.4.25;
 
 
       contract ZombieFactory {
@@ -49,7 +49,7 @@ material:
           }
 
           function _generateRandomDna(string _str) private view returns (uint) {
-              uint rand = uint(keccak256(_str));
+              uint rand = uint(keccak256(abi.encodePacked(_str)));
               return rand % dnaModulus;
           }
 
@@ -62,13 +62,15 @@ Ethereum incluye una función hash llamada `keccak256`, que es una versión de S
 
 Es muy útil para muchas cosas, pero por ahora vamos a usarlo solamente para generar un número cuasi-aleatorio.
 
+Es importante saber que `keccak256` espera recibir un único parametro de tipo `bytes`. Lo que significa que antes the usar `keccak256` es necesario "comprimir" los parametros:
+
 Ejemplo:
 
 ```
 //6e91ec6b618bb462a4a6ee5aa2cb0e9cf30f7a052bb467b0ba58b8748c00d2e5
-keccak256("aaaab");
+keccak256(abi.encodePacked("aaaab"));
 //b1f078126895a1424524de5321b339ab00408010b7cf0e6ed451514981e58aa9
-keccak256("aaaac");
+keccak256(abi.encodePacked("aaaac"));
 ```
 
 Como puedes ver, el valor devuelto para cada caso es completamente distinto, a pesar de que sólo hemos cambiado un carácter del argumento.
